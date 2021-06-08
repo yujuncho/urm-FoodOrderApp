@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import Input from "../UI/Input";
+import Input from "../../UI/Input";
 
 import styles from "./MealItemForm.module.css";
 
@@ -13,17 +13,22 @@ function MealItemForm(props) {
 
   let submitHandler = event => {
     event.preventDefault();
-    console.log(typeof inputValue);
+    console.log(inputValue);
   };
 
   return (
     <form className={styles.form} onSubmit={submitHandler}>
       <Input
-        id="amount"
         label="Amount"
-        type="number"
-        value={inputValue}
-        onChange={inputChangeHandler}
+        input={{
+          id: "amount_" + props.id,
+          type: "number",
+          min: "1",
+          max: "5",
+          step: "1",
+          value: inputValue,
+          onChange: inputChangeHandler
+        }}
       ></Input>
       <button type="submit">+ Add</button>
     </form>

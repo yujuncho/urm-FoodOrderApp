@@ -1,4 +1,4 @@
-import MealItem from "./MealItem";
+import MealItem from "./MealItem/MealItem";
 import Card from "../UI/Card";
 
 import styles from "./AvailableMeals.module.css";
@@ -30,10 +30,11 @@ const MOCK_MEALS = [
   }
 ];
 
-function AvailableMeals(props) {
+function AvailableMeals() {
   let mealItemList = MOCK_MEALS.map(meal => {
     return (
       <MealItem
+        id={meal.id}
         key={meal.id}
         name={meal.name}
         description={meal.description}
@@ -42,7 +43,13 @@ function AvailableMeals(props) {
     );
   });
 
-  return <Card classes={styles.meals}>{mealItemList}</Card>;
+  return (
+    <section className={styles.meals}>
+      <Card>
+        <ul>{mealItemList}</ul>
+      </Card>
+    </section>
+  );
 }
 
 export default AvailableMeals;

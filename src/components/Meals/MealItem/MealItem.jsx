@@ -3,17 +3,18 @@ import MealItemForm from "./MealItemForm";
 import styles from "./MealItem.module.css";
 
 function MealItem(props) {
+  const price = `$${props.price.toFixed(2)}`;
   return (
-    <ul>
+    <li>
       <div className={styles.meal}>
         <div>
           <h3>{props.name}</h3>
           <div className={styles.description}>{props.description}</div>
-          <div className={styles.price}>{props.price}</div>
+          <div className={styles.price}>{price}</div>
         </div>
-        <MealItemForm />
+        <MealItemForm id={props.id} />
       </div>
-    </ul>
+    </li>
   );
 }
 
