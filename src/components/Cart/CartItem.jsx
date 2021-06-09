@@ -1,44 +1,26 @@
-import { useState } from "react";
-
 import styles from "./CartItem.module.css";
-import React from "react";
 
 function CartItem(props) {
-  const [itemCount, setItemCount] = useState(1);
-
-  const increaseCountHandler = event => {
-    event.preventDefault();
-    setItemCount(prevState => ++prevState);
-  };
-
-  const decreaseCountHandler = event => {
-    event.preventDefault();
-    setItemCount(prevState => {
-      if (prevState > 0) {
-        return --prevState;
-      }
-      return prevState;
-    });
-  };
+  const price = `$${props.price.toFixed(2)}`;
 
   return (
-    <div className={styles["cart-item"]}>
+    <li className={styles["cart-item"]}>
       <div>
-        <h2>Schnitzel</h2>
+        <h2>{props.name}</h2>
         <div className={styles.summary}>
-          <div className={styles.price}>$16.50</div>
-          <div className={styles.amount}>x {itemCount}</div>
+          <div className={styles.price}>{price}</div>
+          <div className={styles.amount}>x {props.amount}</div>
         </div>
       </div>
       <div className={styles.actions}>
-        <button type="button" onClick={decreaseCountHandler}>
+        <button type="button" onClick={props.onRemove}>
           -
         </button>
-        <button type="button" onClick={increaseCountHandler}>
+        <button type="button" onClick={props.onAdd}>
           +
         </button>
       </div>
-    </div>
+    </li>
   );
 }
 

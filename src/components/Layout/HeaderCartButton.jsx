@@ -1,36 +1,45 @@
-import { Fragment, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 
-import Cart from "../Cart/Cart";
+import CartContext from "../../store/cart-context";
 import CartIcon from "../Cart/CartIcon";
 
 import styles from "./HeaderCartButton.module.css";
 
-function HeaderCartButton(props) {
-  const [showModal, setShowModal] = useState(false);
+function HeaderCartButton() {
+  const cartContext = useContext(CartContext);
+  const cartItemCount = cartContext.items.reduce((total, item) => {
+    return total + item.amount;
+  }, 0);
 
-  // TODO: update count based on the actual number of items in the cart
-  const count = 0;
+  const [isAnimatedBtn, setIsAnimatedBtn] = useState(false);
+  const btnClasses = `${styles.button} ${isAnimatedBtn ? styles.bump : ""}`;
 
-  // TODO: create modal and show modal with cart information
-  let showCartHandler = () => {
-    setShowModal(true);
+  let addBumpAnimation = () => {
+    if (cartItemCount > 0) {
+      setIsAnimatedBtn(true);
+    }
+
+    const bumpTimer = setTimeout(() => {
+      setIsAnimatedBtn(false);
+    }, 300);
+
+    const cleanup = () => {
+      clearTimeout(bumpTimer);
+    };
+
+    return cleanup;
   };
 
-  let hideCartHandler = () => {
-    setShowModal(false);
-  };
+  useEffect(addBumpAnimation, [cartItemCount]);
 
   return (
-    <Fragment>
-      {showModal && <Cart onClose={hideCartHandler} />}
-      <button className={styles.button} onClick={showCartHandler}>
-        <span className={styles.icon}>
-          <CartIcon />
-        </span>
-        <span>Your Cart</span>
-        <span className={styles.badge}>{count}</span>
-      </button>
-    </Fragment>
+    <button className={btnClasses} onClick={cartContext.onShowCart}>
+      <span className={styles.icon}>
+        <CartIcon />
+      </span>
+      <span>Your Cart</span>
+      <span className={styles.badge}>{cartItemCount}</span>
+    </button>
   );
 }
 

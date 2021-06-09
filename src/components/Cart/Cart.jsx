@@ -1,39 +1,62 @@
-import ReactDOM from "react-dom";
+import { useContext } from "react";
 
 import Modal from "../UI/Modal";
 import CartItem from "./CartItem";
+import CartContext from "../../store/cart-context";
 
 import styles from "./Cart.module.css";
 
-function Cart(props) {
-  const MOCK_ITEMS = [1];
-  let cartItemList = MOCK_ITEMS.map((meal, index) => {
-    return <CartItem key={index} />;
+function Cart() {
+  const cartContext = useContext(CartContext);
+
+  const cartItemRemoveHandler = id => {
+    cartContext.removeItem(id);
+  };
+
+  const cartItemAddHandler = item => {
+    cartContext.addItem(item);
+  };
+
+  let cartItems = cartContext.items.map(item => {
+    return (
+      <CartItem
+        key={item.id}
+        name={item.name}
+        amount={item.amount}
+        price={item.price}
+        onRemove={cartItemRemoveHandler.bind(null, item.id)}
+        onAdd={cartItemAddHandler.bind(null, item)}
+      />
+    );
   });
 
-  const totalAmount = `$33.00`;
+  const totalAmount = `$${cartContext.totalAmount.toFixed(2)}`;
+  const hasItems = cartContext.items.length > 0;
 
-  return ReactDOM.createPortal(
-    <Modal onClick={props.onClose}>
-      <div className={styles["cart-items"]}>{cartItemList}</div>
+  if (!cartContext.isCartSeen) return null;
+
+  return (
+    <Modal onClick={cartContext.onHideCart}>
+      <ul className={styles["cart-items"]}>{cartItems}</ul>
       <div className={styles.total}>
-        <div>Total Amount</div>
-        <div>{totalAmount}</div>
+        <span>Total Amount</span>
+        <span>{totalAmount}</span>
       </div>
       <div className={styles.actions}>
         <button
           type="button"
           className={styles["button--alt"]}
-          onClick={props.onClose}
+          onClick={cartContext.onHideCart}
         >
           Close
         </button>
-        <button type="button" className={styles.button}>
-          Order
-        </button>
+        {hasItems && (
+          <button type="button" className={styles.button}>
+            Order
+          </button>
+        )}
       </div>
-    </Modal>,
-    document.getElementById("body")
+    </Modal>
   );
 }
 
