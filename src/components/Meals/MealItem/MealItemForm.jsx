@@ -13,7 +13,6 @@ function MealItemForm(props) {
 
   let submitHandler = event => {
     event.preventDefault();
-    console.log(inputValue);
   };
 
   return (
