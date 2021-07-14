@@ -5,7 +5,7 @@ import Card from "../UI/Card";
 
 import styles from "./AvailableMeals.module.css";
 
-const API_URL = "";
+const API_URL = "https://urm-playground-default-rtdb.firebaseio.com/meals.json";
 
 function AvailableMeals() {
   const [meals, setMeals] = useState([]);
